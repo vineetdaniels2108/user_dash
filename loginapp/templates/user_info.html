@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <h2>Welcome {{ log_user.first_name }}</h2>
+        <h3>Test App</h3>
+        <h3>Dashboard</h3>
+        <h3>Profile</h3>
+        <h3><a href="/logout">Logout</a></h3>
+    </div>
+
+    <div>
+        <h3>{{ user.first_name }} {{ user.last_name }}</h3>
+        <h3>User ID: {{ user.id }}</h3>
+        <h3>User email: {{ user.email }}</h3>
+        <h3>User Description: {{ user.description }}</h3>
+    </div>
+
+    <div>
+        <form action="/leave_message" method="POST">
+            {% csrf_token %}
+            <h3>Message: <input type="text" name="message" id="message"></h3>
+            <input type="hidden" name="posted_by" value='{{log_user.id}}'>
+            <input type="hidden" name="posted_for" value='{{user.id}}'>
+            <input type="submit" value="Post Message">
+        </form>
+    </div>
+
+    <div>
+        {% for message in all_messages %}
+        <h2><a href="/show_user_info/{{message.posted_by.id}}">{{message.posted_by.first_name}} wrote</a>{{ message.message }}</h2>
+            {% for comment in message.message_comment.all %}
+            <h2><a href="/show_user_info/{{comment.posted_by.id}}">{{comment.posted_by.first_name}} Wrote</a>{{comment.comment}}</h2>
+            {% endfor %}
+            <form action="/leave_comment" method="POST">
+                {% csrf_token %}
+                <h3>Comment: <input type="text" name="comment" id="comment"></h3>
+                <input type="hidden" name="message_id" value='{{message.id}}'>
+                <input type="hidden" name="posted_by" value='{{log_user.id}}'>
+                <input type="submit" value="Post Comment">
+            </form>
+        {% endfor %}
+    </div>
+</body>
+</html>

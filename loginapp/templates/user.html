@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Page</title>
+</head>
+<body>
+    <div>
+        <h2>Test App</h2>
+        <h2>Dashboard</h2>
+        <h2>Profile</h2>
+        <a href="/logout">Logoff</a>
+    </div>
+
+    <div>
+        <h2>Manage Users</h2>
+        {% if log_user.user_level == 'admin' %}
+        <a href="/show_add_new">Add New</a>
+        {% endif %}
+    </div>
+
+    <div>
+        Welcome {{ log_user.first_name }}
+    </div>
+
+    <div>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>created_at</th>
+                <th>user_level</th>
+                {% if log_user.user_level == 'admin' or log_user.id == user.id %}
+                <th>Actions</th>
+                {% endif %}
+            </tr>
+            {% for user in all_users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td><a href="/show_user_info/{{ user.id }}">{{ user.first_name }} {{ user.last_name }}</a></td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.created_at }}</td>
+                <td>{{user.user_level }}</td>
+                {% if log_user.user_level == 'admin' or log_user.id == user.id %}
+                <td><a href="/edit/{{user.id}}">Edit User</a><br><a href="/delete/{{user.id}}">Remove</a></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </table>
+    </div>    
+</body>
+</html>

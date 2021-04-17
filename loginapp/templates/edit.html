@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <h3>Test App</h3>
+        <h3>Dashboard</h3>
+        <h3>Profile</h3>
+        <h3><a href="/logout">Logout</a></h3>
+    </div>
+
+    <div>
+        <h3>Edit User {{ user.first_name }}</h3>
+        <a href="/show_user/{{log_user.id}}">Return to Dashboard</a>
+    </div>
+
+    <div>
+        <form action="/edit_user_info/{{user.id}}" method="POST">
+            {% csrf_token %}
+            <div>
+                <h4>Email: <input type="text" value="{{user.email}}" name="email" id="email"></h4>
+                <h4>First Name: <input type="text" value="{{user.first_name}}" name="first_name" id="first_name"></h4>
+                <h4>Last Name: <input type="text" value="{{user.last_name}}" name="last_name" id="last_name"></h4>
+                <h4>Description: <input type="text" value= "{{user.description}}" name = "description" id = "description"></h4>
+                {% if log_user.user_level == 'admin' %}
+                <select name="user_level" id="user_level">
+                    <option value="admini">Admin</option>
+                    <option value="normal">Normal</option>
+                </select>
+                {% endif %}
+                <input type="submit" value="Save Information">
+            </div>
+        </form>
+
+        <form action="/edit_user_password/{{user.id}}" method="POST">
+            {% csrf_token %}
+            <div>
+                <h4>Password: <input type="text" name="password" id="password"></h4>
+                <h4>Confirm Password <input type="text" name="confirm_password" id= "confirm_password"></h4>
+                <input type="submit" value="Update Password">
+            </div>
+        </form>
+    </div>
+</body>
+</html>
